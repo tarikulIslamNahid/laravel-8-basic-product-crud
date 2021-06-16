@@ -15,7 +15,7 @@
     <div class="row">
         <div class="col-8 m-auto justify-content-between d-flex mb-4">
 
-            <a href="#" class="btn btn-success btn-sm">Create Product</a>
+            <a href="{{route('product.create')}}" class="btn btn-success btn-sm">Create Product</a>
             <h5 class='text-center'>Category List</h5>
             <a href="{{route('category.create')}}" class="btn btn-success btn-sm">Create Category</a>
         </div>
@@ -49,7 +49,7 @@
              <tbody>
                  @foreach ($categories as $key => $category)
                  <tr>
-                    <th scope="row">{{$key+1}}</th>
+                    <th scope="row">{{($categories->currentpage()-1) * $categories  ->perpage() + $key + 1 }}</th>
                     <td>{{$category->name}}</td>
                     <td>
                         <a class='btn btn-sm btn-primary' href="{{route('category.edit',$category->id)}}">Edit</a>
@@ -60,7 +60,9 @@
 
 
              </tbody>
+
            </table>
+           {{ $categories->links() }}
         </div>
     </div>
 </div>

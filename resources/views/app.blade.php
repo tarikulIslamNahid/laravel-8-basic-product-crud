@@ -9,6 +9,11 @@
         <!-- Fonts -->
         <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="{{asset('assets/bootstrap.css')}}">
+<style>
+    .hidden.sm\:flex-1.sm\:flex.sm\:items-center.sm\:justify-between {
+    display: none !important;
+}
+</style>
     </head>
     <body class="antialiased">
 

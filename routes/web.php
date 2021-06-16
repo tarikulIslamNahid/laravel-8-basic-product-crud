@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('products');
+    return view('products.index');
 })->name('product');
 
 // category managment

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\category;
 use App\Models\products;
 use Illuminate\Http\Request;
 
@@ -14,7 +15,10 @@ class ProductsController extends Controller
      */
     public function index()
     {
-        //
+        $products=products::orderBy('cat_id', 'ASC')->paginate(5);
+
+        return view('products.index',compact('products'));
+
     }
 
     /**
@@ -24,7 +28,11 @@ class ProductsController extends Controller
      */
     public function create()
     {
-        //
+        $categories=category::all();
+
+        return view('products.create',compact('categories'));
+
+
     }
 
     /**
@@ -35,19 +43,21 @@ class ProductsController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validateData=$request->validate([
+            'name' =>'required|unique:products|max:120',
+            'cat_id' =>'required',
+            'price' =>'required',
+        ]);
+
+        $products= new products;
+        $products->name=$request->name;
+        $products->cat_id=$request->cat_id;
+        $products->price=$request->price;
+        $products->save();
+
+        return redirect()->route('product')->with('proCreate','Product Create Successfully');
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\products  $products
-     * @return \Illuminate\Http\Response
-     */
-    public function show(products $products)
-    {
-        //
-    }
 
     /**
      * Show the form for editing the specified resource.
@@ -55,9 +65,12 @@ class ProductsController extends Controller
      * @param  \App\Models\products  $products
      * @return \Illuminate\Http\Response
      */
-    public function edit(products $products)
+    public function edit($id)
     {
-        //
+        $categories=category::all();
+
+        $products= products::find($id);
+        return view('products.edit',compact('products','categories'));
     }
 
     /**
@@ -67,9 +80,19 @@ class ProductsController extends Controller
      * @param  \App\Models\products  $products
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, products $products)
+    public function update(Request $request,$id)
     {
-        //
+        $products=products::find($id);
+
+        $validateData =$request->validate([
+            'name'=>'required|unique:products,name,'.$products->id,
+        ]);
+        $products->name=$request->name;
+        $products->cat_id=$request->cat_id;
+        $products->price=$request->price;
+        $products->save();
+
+        return redirect()->route('product')->with('proUpdate','Product Update Successfully');
     }
 
     /**
@@ -78,8 +101,10 @@ class ProductsController extends Controller
      * @param  \App\Models\products  $products
      * @return \Illuminate\Http\Response
      */
-    public function destroy(products $products)
+    public function destroy($id)
     {
-        //
+        products::findOrFail($id)->delete();
+
+        return redirect()->route('product')->with('proDelete','Delete Successfully');
     }
 }
